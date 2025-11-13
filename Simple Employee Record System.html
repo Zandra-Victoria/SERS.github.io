@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Record System</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    input, button { margin: 5px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h2>Employee Record System (Demo)</h2>
+
+  <input type="text" id="empName" placeholder="Employee Name">
+  <input type="text" id="empPosition" placeholder="Position">
+  <button onclick="addEmployee()">Create</button>
+  <button onclick="modifyEmployee()">Modify</button>
+  <button onclick="deleteEmployee()">Delete</button>
+
+  <table id="empTable">
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Position</th>
+    </tr>
+  </table>
+
+  <script>
+    let employees = [];
+    let selectedIndex = -1;
+
+    function refreshTable() {
+      const table = document.getElementById("empTable");
+      table.innerHTML = "<tr><th>#</th><th>Name</th><th>Position</th></tr>";
+      employees.forEach((emp, index) => {
+        table.innerHTML += `<tr onclick="selectEmployee(${index})">
+          <td>${index + 1}</td><td>${emp.name}</td><td>${emp.position}</td></tr>`;
+      });
+    }
+
+    function addEmployee() {
+      const name = document.getElementById("empName").value;
+      const position = document.getElementById("empPosition").value;
+      if (name && position) {
+        employees.push({ name, position });
+        refreshTable();
+        clearFields();
+      } else {
+        alert("Please enter both name and position.");
+      }
+    }
+
+    function selectEmployee(index) {
+      selectedIndex = index;
+      document.getElementById("empName").value = employees[index].name;
+      document.getElementById("empPosition").value = employees[index].position;
+    }
+
+    function modifyEmployee() {
+      if (selectedIndex >= 0) {
+        employees[selectedIndex].name = document.getElementById("empName").value;
+        employees[selectedIndex].position = document.getElementById("empPosition").value;
+        refreshTable();
+        clearFields();
+      } else {
+        alert("Select a record to modify.");
+      }
+    }
+
+    function deleteEmployee() {
+      if (selectedIndex >= 0) {
+        employees.splice(selectedIndex, 1);
+        refreshTable();
+        clearFields();
+      } else {
+        alert("Select a record to delete.");
+      }
+    }
+
+    function clearFields() {
+      document.getElementById("empName").value = "";
+      document.getElementById("empPosition").value = "";
+      selectedIndex = -1;
+    }
+  </script>
+</body>
+</html>
